@@ -1,6 +1,14 @@
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
+import csv
 
+class City():
+  def __init__(self,name, lat, lon):
+    self.name = name
+    self.lat = lat
+    self.lon = lon 
+  def __str__(self):
+    return f'{self.name}, {self.lat}, {self.lon}'
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -17,9 +25,17 @@
 cities = []
 
 def cityreader(cities=[]):
-  # TODO Implement the functionality to read from the 'cities.csv' file
-  # For each city record, create a new City instance and add it to the 
-  # `cities` list
+  #opens cvs file and defined for later use
+  with open("C:/Users/bbjbe/Desktop/Lambda/Sprint-Challenge--Intro-Python/src/cityreader/cities.csv") as cities_cvs:
+    read_file = csv.reader(cities_cvs)
+    # next will skip the first line (it can skip any line defined/defaults to first line)
+    next(read_file)
+    #loops over csv and grabs the name from the first index\ the lat from the 3rd index \ and the lon form the 4th index and appends them to our cities list
+    for row in read_file:
+      city_name = row[0]
+      lat = row[3]
+      lon = row[4]
+      cities.append(City(city_name, float(lat), float(lon) ))
     
     return cities
 
@@ -59,6 +75,8 @@ for c in cities:
 # Salt Lake City: (40.7774,-111.9301)
 
 # TODO Get latitude and longitude values from the user
+lat1, lon1 = input('please enter lat 1 and lon 1 seperated by a comma:').split(',')
+lat2, lon2 = input('please enter lat2 and lon2 seperated by a comma:').split(",")
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
@@ -67,5 +85,16 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
+  lat1, lon1, lat2, lon2 = float(lat1), float(lon1), float(lat2), float(lon2)
 
+ # loops through cities, if the lat and long is inbetween the ranges then the city will be appended to the within list 
+  for city in cities:
+    if city.lat <=max(lat1,lat2) and city.lat >= min(lat1,lat2)\
+      and city.lon <= max(lon1,lon2) and city.lon >= min(lon1,lon2):
+      within.append(city)
   return within
+
+results = cityreader_stretch(lat1,lon1,lat2,lon2,cities)
+
+for c in results:
+  print(c)
